@@ -2,11 +2,10 @@ pub mod routes;
 
 pub use fastembed::{
     EmbeddingModel, InitOptions, InitOptionsUserDefined, ModelInfo, TextEmbedding,
-    UserDefinedEmbeddingModel,
+    UserDefinedEmbeddingModel, ExecutionProviderDispatch
 };
 
 use reqwest;
-
 pub use routes::*;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -197,10 +196,11 @@ pub fn init_text_embedding() -> TextEmbedding {
 pub fn new_text_embedding(model_name: &EmbeddingModel) -> TextEmbedding {
     TextEmbedding::try_new(InitOptions {
         cache_dir: Into::into("./.fastembed_cache"),
+        execution_providers: vec![ExecutionProviderDispatch::CUDA(Default::default())], // Corrected default() to Default::default()
         model_name: model_name.clone(),
         ..Default::default()
     })
-    .expect("Can't load model")
+    .expect("Nie można załadować modelu") // Translated error message to Polish
 }
 
 pub fn new_text_embedding_user_defined(model: UserDefinedEmbeddingModel) -> TextEmbedding {
